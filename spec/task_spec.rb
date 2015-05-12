@@ -1,15 +1,4 @@
-require('rspec')
-require('pg')
-require('list')
 require('spec_helper')
-
-DB = PG.connect({:dbname => 'to_do_test'})
-
-RSpec.configure do |config|
-  config.after(:each) do
-    DB.exec("DELETE FROM lists *;")
-  end
-end
 
 
 describe(Task) do
@@ -21,7 +10,7 @@ describe(Task) do
 
   describe("#save") do
     it('adds a task to the array of saved tasks') do
-      test_task = Task.new({:description => "learn SQL", :list_id => 1})
+      test_task = Task.new({:description => "learn SQL"})
       test_task.save()
       expect(Task.all()).to(eq([test_task]))
     end
@@ -34,10 +23,14 @@ describe(Task) do
     end
   end
 
-  describe("#list_id") do
-    it('lets you read the list ID out') do
-      test_task = Task.new({:description => "learn SQL", :list_id => 1})
-      expect(test_task.list_id()).to(eq(1))
+  describe("#assign_list") do
+    it('assign a list to a task') do
+      test_list = List.new({:name => "to_do", :id => nil})
+      test_list.save()
+      test_task = Task.new({:description => "learn SQL"})
+      test_task.save()
+      test_task.assign_list(test_list.id)
+      expect(test_task.list_id()).to(eq(test_list.id))
     end
   end
 

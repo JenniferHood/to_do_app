@@ -1,15 +1,4 @@
-require('rspec')
-require('pg')
-require('list')
 require('spec_helper')
-
-DB = PG.connect({:dbname => "to_do_test"})
-
-RSpec.configure do |config|
-  config.after(:each) do
-    DB.exec("DELETE FROM lists *;")
-  end
-end
 
 describe(List) do
   describe('.all') do
@@ -26,7 +15,7 @@ describe(List) do
   end
 
   describe("#id") do
-    it('sets its Id when you save it') do
+    it('sets its ID when you save it') do
       list = List.new({:name => "Epicodus stuff", :id => nil})
       list.save()
       expect(list.id()).to(be_an_instance_of(Fixnum))
